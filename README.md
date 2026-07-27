@@ -115,23 +115,6 @@ búsqueda y filtro por categoría.
 **Sobre la configuración regional.** El ejemplo estaba configurado para
 Colombia. Lo ajustamos a Chile, que es el contexto de nuestra propuesta.
 
-## Cómo se conecta con la Sumativa 1
-
-**Sobre la elección del actor.** Construimos la interfaz del Local porque era
-el actor más restringido del caso original: operaba únicamente desde una PC
-fija. Una aplicación web responsive levanta esa restricción sin costo de
-instalación, tal como argumentamos en la propuesta.
-
-**Sobre el campo de disponibilidad.** Responde al problema de gestión de
-disponibilidad que detectamos en el caso: no estaba resuelto qué ocurría
-cuando un producto se agotaba. Con este campo el Local lo retira de la carta
-de inmediato, sin eliminarlo ni editar el registro completo.
-
-**Sobre la separación en repositorios y servicios.** En nuestra arquitectura
-los tres actores comparten un mismo backend mediante una API común. Concentrar
-las consultas y las reglas de negocio en una capa propia permite reutilizarlas
-después desde esa API, en lugar de duplicarlas en cada interfaz.
-
 ## Alcance y limitaciones
 
 El módulo administra el menú de un local, con el usuario autenticado como su
