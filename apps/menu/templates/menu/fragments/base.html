@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>FoodPlease 2.0 — Gestión de menú</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <style>
+        .errorlist { color: #F44336 !important; list-style: none; padding-left: 0; }
+        .agotado { opacity: .55; }
+        .precio { font-weight: 600; }
+    </style>
+</head>
+<body>
+<nav class="teal darken-2" role="navigation">
+    <div class="nav-wrapper container">
+        <a href="{% url 'menu:home' %}" class="brand-logo">FoodPlease 2.0</a>
+        {% if request.user.is_authenticated %}
+            <ul class="right hide-on-med-and-down">
+                <li><a href="{% url 'menu:home' %}">Productos</a></li>
+                <li><a href="{% url 'menu:categoria-list' %}">Categorías</a></li>
+                <li><a href="{% url 'menu:log-out' %}">Salir</a></li>
+            </ul>
+        {% endif %}
+    </div>
+</nav>
+
+<div class="container">
+    <div class="section">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="card-panel {% if message.tags == 'error' %}red darken-1{% elif message.tags == 'success' %}green darken-1{% else %}blue-grey darken-1{% endif %}">
+                    <span class="white-text">{{ message }}</span>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        {% block main-content %}{% endblock %}
+    </div>
+    <br><br>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        M.FormSelect.init(document.querySelectorAll('select'));
+    });
+</script>
+</body>
+</html>

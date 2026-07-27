@@ -1,0 +1,121 @@
+{% extends 'menu/fragments/base.html' %}
+{% block main-content %}
+    <div class="row valign-wrapper">
+        <div class="col s12 m6">
+            <h5 class="grey-text text-darken-2">Menú del local</h5>
+            <p class="grey-text">
+                {{ resumen.total }} producto(s) ·
+                <span class="green-text">{{ resumen.disponibles }} disponible(s)</span> ·
+                <span class="red-text">{{ resumen.agotados }} agotado(s)</span>
+            </p>
+        </div>
+        <div class="col s12 m6 right-align">
+            <a class="waves-effect waves-light btn teal darken-2" href="{% url 'menu:producto-create' %}">
+                <i class="material-icons left">add</i>Nuevo producto
+            </a>
+        </div>
+    </div>
+
+    <form method="get" class="row card-panel grey lighten-4">
+        <div class="input-field col s12 m5">
+            <input type="text" name="q" id="q" value="{{ busqueda }}">
+            <label for="q">Buscar por nombre</label>
+        </div>
+        <div class="input-field col s12 m4">
+            <select name="categoria">
+                <option value="">Todas las categorías</option>
+                {% for categoria in categorias %}
+                    <option value="{{ categoria.pk }}"
+                            {% if categoria_id == categoria.pk|stringformat:"s" %}selected{% endif %}>
+                        {{ categoria.name }}
+                    </option>
+                {% endfor %}
+            </select>
+            <label>Categoría</label>
+        </div>
+        <div class="input-field col s12 m3">
+            <button class="btn waves-effect teal darken-2" type="submit">
+                <i class="material-icons left">search</i>Filtrar
+            </button>
+        </div>
+    </form>
+
+    <div class="row">
+        <div class="col s12">
+            {% if not productos %}
+                <div class="card-panel amber lighten-4">
+                    <span>No hay productos que coincidan con la búsqueda.</span>
+                </div>
+            {% else %}
+                <table class="striped highlight responsive-table">
+                    <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Categoría</th>
+                        <th>Precio</th>
+                        <th>Estado</th>
+                        <th width="25%">Opciones</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for producto in productos %}
+                        <tr class="{% if not producto.disponible %}agotado{% endif %}">
+                            <td>{{ producto.name }}</td>
+                            <td>{{ producto.categoria.name }}</td>
+                            <td class="precio">${{ producto.precio }}</td>
+                            <td>
+                                {% if producto.disponible %}
+                                    <span class="new badge green" data-badge-caption="Disponible"></span>
+                                {% else %}
+                                    <span class="new badge red" data-badge-caption="Agotado"></span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a class="btn-floating btn-small waves-effect teal"
+                                   href="{{ producto.get_detail_url }}" title="Ver">
+                                    <i class="material-icons">visibility</i></a>
+                                <a class="btn-floating btn-small waves-effect blue"
+                                   href="{{ producto.get_edit_url }}" title="Editar">
+                                    <i class="material-icons">edit</i></a>
+                                {# El cambio de disponibilidad modifica datos: va por POST, no por enlace #}
+                                <form method="post" action="{{ producto.get_toggle_url }}" style="display:inline">
+                                    {% csrf_token %}
+                                    <button class="btn-floating btn-small waves-effect orange darken-2"
+                                            type="submit" title="Cambiar disponibilidad">
+                                        <i class="material-icons">swap_horiz</i></button>
+                                </form>
+                                <a class="btn-floating btn-small waves-effect red"
+                                   href="{{ producto.get_delete_url }}" title="Eliminar">
+                                    <i class="material-icons">delete</i></a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+
+                {% if pagina.has_other_pages %}
+                    <ul class="pagination center-align">
+                        {% if pagina.has_previous %}
+                            <li class="waves-effect">
+                                <a href="?page={{ pagina.previous_page_number }}&q={{ busqueda }}">
+                                    <i class="material-icons">chevron_left</i></a></li>
+                        {% else %}
+                            <li class="disabled"><i class="material-icons">chevron_left</i></li>
+                        {% endif %}
+
+                        <li class="active teal darken-2">
+                            <a href="#">{{ pagina.number }} de {{ pagina.paginator.num_pages }}</a></li>
+
+                        {% if pagina.has_next %}
+                            <li class="waves-effect">
+                                <a href="?page={{ pagina.next_page_number }}&q={{ busqueda }}">
+                                    <i class="material-icons">chevron_right</i></a></li>
+                        {% else %}
+                            <li class="disabled"><i class="material-icons">chevron_right</i></li>
+                        {% endif %}
+                    </ul>
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

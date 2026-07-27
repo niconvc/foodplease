@@ -1,0 +1,13 @@
+{% extends 'menu/fragments/base.html' %}
+{% block main-content %}
+    <div class="row">
+        <div class="col s12 m8 offset-m2">
+            <h5 class="center-align grey-text text-darken-2">Panel de gestión de menú</h5>
+            <p class="center-align grey-text">Acceso para el encargado del Local</p>
+            {% if message %}
+                <div class="card-panel red darken-1"><span class="white-text">{{ message }}</span></div>
+            {% endif %}
+            {% include 'menu/fragments/forms.html' %}
+        </div>
+    </div>
+{% endblock %}

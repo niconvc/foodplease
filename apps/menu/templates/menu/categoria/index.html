@@ -1,0 +1,42 @@
+{% extends 'menu/fragments/base.html' %}
+{% block main-content %}
+    <div class="row valign-wrapper">
+        <div class="col s12 m6"><h5 class="grey-text text-darken-2">Categorías del menú</h5></div>
+        <div class="col s12 m6 right-align">
+            <a class="waves-effect waves-light btn teal darken-2" href="{% url 'menu:categoria-create' %}">
+                <i class="material-icons left">add</i>Nueva categoría</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col s12">
+            {% if not categorias %}
+                <div class="card-panel amber lighten-4"><span>No hay categorías registradas.</span></div>
+            {% else %}
+                <table class="striped highlight responsive-table">
+                    <thead>
+                    <tr>
+                        <th>Orden</th><th>Nombre</th><th>Productos</th>
+                        <th>Última actualización</th><th width="20%">Opciones</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for categoria in categorias %}
+                        <tr>
+                            <td>{{ categoria.orden }}</td>
+                            <td>{{ categoria.name }}</td>
+                            <td>{{ categoria.cantidad }}</td>
+                            <td>hace {{ categoria.updated|timesince }}</td>
+                            <td>
+                                <a class="btn-floating btn-small waves-effect blue"
+                                   href="{{ categoria.get_edit_url }}"><i class="material-icons">edit</i></a>
+                                <a class="btn-floating btn-small waves-effect red"
+                                   href="{{ categoria.get_delete_url }}"><i class="material-icons">delete</i></a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

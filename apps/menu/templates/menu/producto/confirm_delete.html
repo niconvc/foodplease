@@ -1,0 +1,21 @@
+{% extends 'menu/fragments/base.html' %}
+{% block main-content %}
+    {# El borrado se confirma y se ejecuta por POST: un GET no debe modificar datos #}
+    <div class="row">
+        <div class="col s12 m8 offset-m2">
+            <div class="card-panel red lighten-5">
+                <h5>Confirmar eliminación</h5>
+                <p>¿Está seguro de eliminar el producto <b>{{ producto.name }}</b>?
+                    Esta acción no se puede deshacer.</p>
+                <p class="grey-text">Si el producto solo está agotado de forma temporal,
+                    conviene marcarlo como no disponible en lugar de eliminarlo.</p>
+                <form method="post">
+                    {% csrf_token %}
+                    <button class="btn red darken-1" type="submit">
+                        <i class="material-icons left">delete</i>Eliminar</button>
+                    <a class="btn-flat" href="{% url 'menu:home' %}">Cancelar</a>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
